@@ -1,0 +1,58 @@
+<div id="sidebar_plugin_pangolin">
+
+  <!-- Status row -->
+  <div class="pangolin-status-row">
+    <span class="pangolin-dot" data-bind="css: dotClass"></span>
+    <span class="pangolin-status-text" data-bind="text: statusLabel"></span>
+  </div>
+
+  <!-- Not-installed banner -->
+  <!-- ko if: !isInstalled() -->
+  <div class="pangolin-notice">
+    <i class="icon-warning-sign"></i>
+    Newt is not installed.
+    <a href="#" data-bind="click: installNewt">Install now</a>
+  </div>
+  <!-- /ko -->
+
+  <!-- Not-configured warning -->
+  <!-- ko if: isInstalled() && !isConfigured() -->
+  <div class="pangolin-notice">
+    <i class="icon-info-sign"></i>
+    Enter your Newt ID &amp; secret in
+    <a href="#" onclick="$('#settings_dialog').modal('show'); return false;">Settings</a>.
+  </div>
+  <!-- /ko -->
+
+  <!-- Controls -->
+  <!-- ko if: isInstalled() && isConfigured() -->
+  <div class="pangolin-btn-row">
+    <button class="btn btn-mini btn-success" data-bind="click: startNewt, enable: !isRunning()">
+      <i class="icon-play"></i> Start
+    </button>
+    <button class="btn btn-mini btn-danger" data-bind="click: stopNewt, enable: isRunning()">
+      <i class="icon-stop"></i> Stop
+    </button>
+    <button class="btn btn-mini" data-bind="click: restartNewt">
+      <i class="icon-refresh"></i> Restart
+    </button>
+  </div>
+  <!-- /ko -->
+
+  <!-- Log -->
+  <div class="pangolin-log-header">
+    <small><strong>Log</strong></small>
+    <a href="#" class="pull-right" data-bind="click: refreshStatus">
+      <small><i class="icon-refresh"></i></small>
+    </a>
+  </div>
+  <!-- ko if: logLines().length > 0 -->
+  <div class="pangolin-log" data-bind="foreach: logLines">
+    <div class="pangolin-log-line" data-bind="text: $data"></div>
+  </div>
+  <!-- /ko -->
+  <!-- ko if: logLines().length === 0 -->
+  <div class="pangolin-log-empty"><small>No output yet.</small></div>
+  <!-- /ko -->
+
+</div>

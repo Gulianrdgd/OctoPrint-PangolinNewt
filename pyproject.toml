@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "OctoPrint-Pangolin"
+version = "0.2.0"
+description = "Pangolin Newt tunnel manager for OctoPrint: auto-installs and manages Newt for you"
+authors = [
+    {name = "Julian van der Horst"}
+]
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.7, <4"
+dependencies = []
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = [
+    "octoprint_pangolin",
+    "octoprint_pangolin.*"
+]
+
+[project.entry-points."octoprint.plugin"]
+pangolin = "octoprint_pangolin"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/OctoPrint-Pangolin"

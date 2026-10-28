@@ -1,0 +1,87 @@
+/* ---- OctoPrint-Pangolin plugin styles ---- */
+
+#sidebar_plugin_pangolin {
+    padding: 4px 0 8px;
+}
+
+.pangolin-status-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 7px;
+}
+
+/* Status dot */
+.pangolin-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: #999;
+}
+.pangolin-dot--running    { background: #5cb85c; }
+.pangolin-dot--stopped    { background: #999; }
+.pangolin-dot--error      { background: #d9534f; }
+.pangolin-dot--installing {
+    background: #f0ad4e;
+    animation: pangolin-pulse 1s infinite;
+}
+
+@keyframes pangolin-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.35; }
+}
+
+.pangolin-status-text {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* Notice banner */
+.pangolin-notice {
+    font-size: 11px;
+    background: #fff8e6;
+    border: 1px solid #f0ad4e;
+    border-radius: 3px;
+    padding: 5px 8px;
+    margin-bottom: 7px;
+    line-height: 1.5;
+}
+
+/* Control buttons */
+.pangolin-btn-row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 9px;
+    flex-wrap: wrap;
+}
+
+/* Log area */
+.pangolin-log-header {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 2px;
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.pangolin-log {
+    max-height: 160px;
+    overflow-y: auto;
+    background: #111;
+    border-radius: 3px;
+    padding: 5px 7px;
+    font-family: monospace;
+    font-size: 10px;
+}
+
+.pangolin-log-line {
+    color: #a8e6a8;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 1.45;
+}
+
+.pangolin-log-empty {
+    color: #999;
+    font-size: 11px;
+}
