@@ -143,13 +143,8 @@ $(function () {
 
         self.endpointError = ko.pureComputed(function () {
             if (!self.settings) return "";
-            return /^https?:\/\/[^\s\/]+/i.test(trimmed(self.settings.pangolin_endpoint))
-                ? "" : "Enter a full URL, for example https://app.pangolin.net. Invalid URLs are not saved.";
-        });
-        self.endpointWarning = ko.pureComputed(function () {
-            if (!self.settings || self.endpointError()) return "";
-            return /^http:\/\//i.test(trimmed(self.settings.pangolin_endpoint))
-                ? "Plain http sends your credentials unencrypted. Use https if you can." : "";
+            return /^https:\/\/[^\s\/]+/i.test(trimmed(self.settings.pangolin_endpoint))
+                ? "" : "Enter a full https:// URL, for example https://app.pangolin.net. Other URLs are not saved.";
         });
         self.idError = ko.pureComputed(function () {
             if (!self.settings) return "";

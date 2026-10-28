@@ -44,7 +44,7 @@ docs/plugins.octoprint.org/pangolin_newt.md  Draft entry for the plugin registry
 - Each start bumps a generation counter. Threads of an older process never touch state (this was the old "status flips to stopped after restart" bug).
 - State changes and log lines are coalesced (250 ms) and pushed with `send_plugin_message` (admin only). The UI fetches a full snapshot via `GET /api/plugin/pangolin_newt` on startup, login, reconnect and when settings open. Log lines carry a number so the UI only appends new ones.
 - API (`POST /api/plugin/pangolin_newt`, admin only): `start`, `stop`, `restart`, `reinstall`.
-- Settings: the secret is write-only (`on_settings_load` blanks it, an empty value on save keeps the stored one). Inputs are trimmed and invalid endpoints are dropped (`clean_settings`). Changing ID, secret or endpoint restarts Newt when it is running or autostart is on.
+- Settings: the secret is write-only (`on_settings_load` blanks it, an empty value on save keeps the stored one). Inputs are trimmed and invalid or non-https endpoints are dropped (`clean_settings`); the plugin registry requires https for external services. Changing ID, secret or endpoint restarts Newt when it is running or autostart is on.
 - Release flow: plugin updates reach users through OctoPrint's Software Update (`github_release`, tags without `v`, pip installs `archive/{target_version}.zip`). The plugin registry only needs the one-time PR.
 
 ## Known issues and TODO

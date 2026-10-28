@@ -18,7 +18,7 @@ CREDENTIAL_KEYS = ("newt_id", "newt_secret", "pangolin_endpoint")
 
 def valid_endpoint(url):
     parsed = urlparse(url)
-    return parsed.scheme in ("http", "https") and bool(parsed.netloc)
+    return parsed.scheme == "https" and bool(parsed.netloc)
 
 
 def clean_settings(data):

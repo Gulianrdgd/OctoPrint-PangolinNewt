@@ -14,7 +14,7 @@ The plugin downloads Pangolin's **Newt** client, verifies its checksum, runs it 
 3. In your Pangolin dashboard, open **Sites** and add a site of type **Newt**. Copy the **Newt ID** and **Newt secret**. The secret is shown only once.
 4. In OctoPrint, open **Settings → Pangolin Newt Client**, paste both values and click **Save**.
 
-The tunnel comes up within a few seconds. Leave the endpoint at `https://app.pangolin.net` unless you host Pangolin yourself.
+The tunnel comes up within a few seconds. Leave the endpoint at `https://app.pangolin.net` unless you host Pangolin yourself. The endpoint must use https.
 
 ## Sidebar
 

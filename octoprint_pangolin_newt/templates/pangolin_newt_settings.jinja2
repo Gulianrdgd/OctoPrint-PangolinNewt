@@ -33,14 +33,13 @@
 
 <form class="form-horizontal" onsubmit="return false;">
 
-  <div class="control-group" data-bind="css: {error: endpointError, warning: endpointWarning}">
+  <div class="control-group" data-bind="css: {error: endpointError}">
     <label class="control-label">Pangolin endpoint</label>
     <div class="controls">
       <input type="url" class="input-block-level"
              data-bind="textInput: settings.pangolin_endpoint"
              placeholder="https://app.pangolin.net">
       <span class="help-block" data-bind="visible: endpointError, text: endpointError"></span>
-      <span class="help-block" data-bind="visible: endpointWarning, text: endpointWarning"></span>
       <span class="help-block">Keep the default for Pangolin Cloud. Change it only if you host Pangolin yourself.</span>
     </div>
   </div>
