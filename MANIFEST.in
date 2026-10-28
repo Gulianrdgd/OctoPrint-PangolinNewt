@@ -1,2 +1,3 @@
-recursive-include octoprint_pangolin/templates *
-recursive-include octoprint_pangolin/static *
+recursive-include octoprint_pangolin_newt/templates *
+recursive-include octoprint_pangolin_newt/static *
+include octoprint_pangolin_newt/newt_release.json

@@ -1,6 +1,6 @@
-/* ---- OctoPrint-Pangolin plugin styles ---- */
+/* ---- Pangolin Newt Client plugin styles ---- */
 
-#sidebar_plugin_pangolin {
+#sidebar_plugin_pangolin_newt {
     padding: 4px 0 8px;
 }
 
@@ -19,9 +19,11 @@
     flex-shrink: 0;
     background: #999;
 }
-.pangolin-dot--running    { background: #5cb85c; }
-.pangolin-dot--stopped    { background: #999; }
-.pangolin-dot--error      { background: #d9534f; }
+.pangolin-dot--connected     { background: #5cb85c; }
+.pangolin-dot--stopped       { background: #999; }
+.pangolin-dot--not_installed { background: #ccc; }
+.pangolin-dot--error         { background: #d9534f; }
+.pangolin-dot--connecting,
 .pangolin-dot--installing {
     background: #f0ad4e;
     animation: pangolin-pulse 1s infinite;
@@ -35,6 +37,43 @@
 .pangolin-status-text {
     font-size: 13px;
     font-weight: bold;
+}
+
+/* State message and request errors */
+.pangolin-message {
+    font-size: 11px;
+    color: #777;
+    margin-bottom: 7px;
+}
+.pangolin-error {
+    font-size: 11px;
+    color: #b94a48;
+    margin-bottom: 7px;
+}
+
+/* Settings page */
+.pangolin-status-box {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+}
+.pangolin-status-box .pangolin-message {
+    margin-bottom: 0;
+}
+.pangolin-facts {
+    margin: 4px 0 10px;
+}
+.pangolin-facts dt {
+    width: 110px;
+    font-weight: normal;
+    color: #777;
+}
+.pangolin-facts dd {
+    margin-left: 125px;
+}
+.pangolin-steps {
+    margin-bottom: 6px;
 }
 
 /* Notice banner */

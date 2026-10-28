@@ -1,46 +1,57 @@
-# OctoPrint-Pangolin
+# Pangolin Newt Client for OctoPrint
 
-Manage a [Pangolin](https://pangolin.net) **Newt** tunnel directly from OctoPrint, no terminal required.
+Reach your OctoPrint from anywhere through [Pangolin](https://pangolin.net), without opening ports and without touching a terminal.
 
-## What it does
-
-1. **Auto-downloads and installs the Newt binary** on first run (detects Pi architecture automatically)
-2. **Starts Newt automatically** when OctoPrint boots (optional)
-3. Adds a **sidebar widget** showing connection status, a live log, and Start/Stop/Restart buttons
-4. Adds a **settings page** where you enter your Newt ID, secret and endpoint
+The plugin downloads Pangolin's **Newt** client, verifies its checksum, runs it alongside OctoPrint and shows the tunnel status in the sidebar.
 
 ## Setup
 
-1. Install the plugin via OctoPrint's Plugin Manager → "Get More" → paste the URL:
+1. In OctoPrint, open **Settings → Plugin Manager → Get More**, search for **Pangolin Newt Client** and install it. You can also install it from this URL:
    ```
-   https://github.com/yourusername/OctoPrint-Pangolin/archive/main.zip
+   https://github.com/Gulianrdgd/OctoPrint-PangolinNewt/archive/main.zip
    ```
-2. Restart OctoPrint when prompted
-3. Go to **Settings → Pangolin Newt** and fill in:
-   - **Pangolin Endpoint** (leave as `https://app.pangolin.net` for Pangolin Cloud)
-   - **Newt ID**: from your Pangolin dashboard (Sites → your site)
-   - **Newt Secret**: same place (shown only once when you create the site)
-4. Save. The plugin downloads Newt and starts it automatically.
+2. Restart OctoPrint when prompted.
+3. In your Pangolin dashboard, open **Sites** and add a site of type **Newt**. Copy the **Newt ID** and **Newt secret**. The secret is shown only once.
+4. In OctoPrint, open **Settings → Pangolin Newt Client**, paste both values and click **Save**.
 
-That's it. Your OctoPrint is now accessible via Pangolin.
+The tunnel comes up within a few seconds. Leave the endpoint at `https://app.pangolin.net` unless you host Pangolin yourself.
 
 ## Sidebar
 
-The **Pangolin** sidebar entry shows:
-- 🟢 Connected / ⚫ Stopped / 🟡 Installing / 🔴 Error
-- Start / Stop / Restart controls
-- Live log output from Newt (last 50 lines, refreshed every 10 s)
-- "Install now" button if Newt isn't installed yet
+- Status: Connected, Connecting (with Newt's last error, if any), Stopped, Installing or Error
+- Start, Stop and Restart buttons
+- Live Newt log
+
+The sidebar and the status block in the settings are only shown to administrators.
+
+## Updates
+
+Each plugin release pins one Newt version and its sha256 checksum. A daily GitHub Action checks for new Newt releases and publishes a new plugin version when there is one. OctoPrint's Software Update then offers it like any other plugin update. After the update and restart, the plugin installs the matching Newt.
 
 ## Supported platforms
 
-| Architecture | Pi model |
-|---|---|
-| `arm64` / `aarch64` | Pi 3 / 4 / 5 (64-bit OS) |
-| `armv7l` | Pi 2 / 3 (32-bit OS) |
-| `amd64` / `x86_64` | x86 server/desktop |
+| `uname -m` | Newt build | Typical device |
+|---|---|---|
+| `aarch64` | `arm64` | Pi 3 / 4 / 5 with a 64-bit OS |
+| `armv7l` | `arm32` | Pi 2 / 3 / 4 with a 32-bit OS |
+| `armv6l` | `arm32v6` | Pi Zero / Pi 1 |
+| `x86_64` | `amd64` | x86 servers and PCs |
 
 ## Notes
 
-- The Newt binary is installed to `/usr/local/bin/newt`. On OctoPi the `pi` user may need `sudo` rights to write there. The plugin tries `sudo mv` automatically if a direct write fails.
-- Your Newt secret is stored in OctoPrint's `config.yaml` (the same file that holds your API key).
+- Newt is installed inside OctoPrint's plugin data folder (`~/.octoprint/data/pangolin_newt/bin/newt`). It does not need root or sudo.
+- The Newt secret is stored in OctoPrint's `config.yaml`. It is never sent back to the browser and is passed to Newt through its environment, not its command line.
+- Upgrading from 0.2.x (`OctoPrint-Pangolin`): uninstall the old plugin, install this one and enter your ID and secret again. You can delete the old `/usr/local/bin/newt`.
+
+## Development
+
+```bash
+pip install -e ".[develop]"
+pytest
+```
+
+`scripts/update_newt.py` pins the latest Newt release into `octoprint_pangolin_newt/newt_release.json`. CI runs it daily (`.github/workflows/newt-bump.yml`).
+
+## License
+
+AGPLv3

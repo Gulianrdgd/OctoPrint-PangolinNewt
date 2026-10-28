@@ -1,0 +1,47 @@
+name: Newt bump
+
+# Daily check for a new Newt release. When there is one, pin it, bump the
+# plugin patch version, tag and release so OctoPrint's updater picks it up.
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: newt-bump
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.update.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - id: update
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/update_newt.py
+      - if: steps.update.outputs.version != ''
+        env:
+          VERSION: ${{ steps.update.outputs.version }}
+          NEWT_VERSION: ${{ steps.update.outputs.newt_version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "Bump Newt to $NEWT_VERSION"
+          git tag "$VERSION"
+          git push origin HEAD:main "refs/tags/$VERSION"
+
+  release:
+    needs: bump
+    if: needs.bump.outputs.version != ''
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: ${{ needs.bump.outputs.version }}

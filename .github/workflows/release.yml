@@ -1,0 +1,44 @@
+name: Release
+
+# Runs for manually pushed tags, and is called by newt-bump.yml (a tag pushed
+# with GITHUB_TOKEN does not trigger other workflows).
+on:
+  push:
+    tags: ["[0-9]+.[0-9]+.[0-9]+"]
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[develop]" build
+      - name: Check tag matches pyproject version
+        run: |
+          VERSION=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
+          test "$VERSION" = "$TAG" || { echo "Tag $TAG does not match version $VERSION"; exit 1; }
+      - run: pytest -q
+      - run: python -m build
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NEWT=$(python -c "import json; print(json.load(open('octoprint_pangolin_newt/newt_release.json'))['version'])")
+          gh release create "$TAG" dist/* \
+            --title "$TAG" \
+            --notes "Bundles Newt [$NEWT](https://github.com/fosrl/newt/releases/tag/$NEWT). Update through OctoPrint's Software Update." \
+            --generate-notes

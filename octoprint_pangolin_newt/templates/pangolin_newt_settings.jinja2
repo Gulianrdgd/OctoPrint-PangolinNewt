@@ -1,0 +1,83 @@
+<h3>Pangolin Newt Client</h3>
+
+<div class="pangolin-status-box">
+  <div class="pangolin-status-row">
+    <span data-bind="css: dotClass"></span>
+    <span class="pangolin-status-text" data-bind="text: statusLabel"></span>
+    <span class="pangolin-message" data-bind="visible: message, text: message"></span>
+  </div>
+  <dl class="dl-horizontal pangolin-facts">
+    <dt>Newt version</dt><dd data-bind="text: versionLabel"></dd>
+    <dt>Architecture</dt><dd data-bind="text: arch"></dd>
+  </dl>
+  <div class="pangolin-btn-row">
+    <button class="btn btn-small" data-bind="click: restartNewt, enable: canRestart">
+      <i class="fas fa-sync" data-bind="css: {'fa-spin': busy}"></i> Reconnect
+    </button>
+    <button class="btn btn-small" data-bind="click: reinstallNewt, enable: canReinstall">
+      <i class="fas fa-download"></i> Reinstall Newt
+    </button>
+  </div>
+  <div class="pangolin-error" data-bind="visible: actionError, text: actionError"></div>
+</div>
+
+<h4>Connect this printer</h4>
+<ol class="pangolin-steps">
+  <li>In your Pangolin dashboard, open <strong>Sites</strong> and add a site of type <strong>Newt</strong>.</li>
+  <li>Copy the <strong>Newt ID</strong> and <strong>Newt secret</strong> it shows. The secret is shown only once.</li>
+  <li>Paste them below and click <strong>Save</strong>. The tunnel starts within a few seconds.</li>
+</ol>
+<p class="muted">
+  More detail in the <a href="https://docs.pangolin.net/manage/sites/install-site" target="_blank" rel="noopener noreferrer">Pangolin documentation</a>.
+</p>
+
+<form class="form-horizontal" onsubmit="return false;">
+
+  <div class="control-group" data-bind="css: {error: endpointError, warning: endpointWarning}">
+    <label class="control-label">Pangolin endpoint</label>
+    <div class="controls">
+      <input type="url" class="input-block-level"
+             data-bind="textInput: settings.pangolin_endpoint"
+             placeholder="https://app.pangolin.net">
+      <span class="help-block" data-bind="visible: endpointError, text: endpointError"></span>
+      <span class="help-block" data-bind="visible: endpointWarning, text: endpointWarning"></span>
+      <span class="help-block">Keep the default for Pangolin Cloud. Change it only if you host Pangolin yourself.</span>
+    </div>
+  </div>
+
+  <div class="control-group" data-bind="css: {error: idError}">
+    <label class="control-label">Newt ID</label>
+    <div class="controls">
+      <input type="text" class="input-block-level"
+             data-bind="textInput: settings.newt_id"
+             placeholder="e.g. 31frd0uzbjvp721"
+             autocomplete="off" spellcheck="false">
+      <span class="help-block" data-bind="visible: idError, text: idError"></span>
+    </div>
+  </div>
+
+  <div class="control-group" data-bind="css: {error: secretError}">
+    <label class="control-label">Newt secret</label>
+    <div class="controls">
+      <input type="password" class="input-block-level"
+             data-bind="textInput: settings.newt_secret, attr: {placeholder: secretPlaceholder}"
+             autocomplete="new-password" spellcheck="false">
+      <span class="help-block" data-bind="visible: secretError, text: secretError"></span>
+      <span class="help-block">Stored in OctoPrint's config.yaml and never sent back to the browser.</span>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox" data-bind="checked: settings.autostart">
+        Start Newt automatically when OctoPrint starts
+      </label>
+      <span class="help-block">
+        Changes to the endpoint, ID or secret are applied when you save.
+        Newt is downloaded, checksum-verified and updated by the plugin itself.
+      </span>
+    </div>
+  </div>
+
+</form>

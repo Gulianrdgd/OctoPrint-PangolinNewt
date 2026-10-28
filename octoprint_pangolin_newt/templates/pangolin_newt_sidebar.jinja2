@@ -1,0 +1,40 @@
+<!-- ko ifnot: loginState.isAdmin -->
+<div class="pangolin-log-empty"><small>Log in as an administrator to manage the Pangolin tunnel.</small></div>
+<!-- /ko -->
+
+<!-- ko if: loginState.isAdmin -->
+<div class="pangolin-status-row">
+  <span data-bind="css: dotClass"></span>
+  <span class="pangolin-status-text" data-bind="text: statusLabel"></span>
+</div>
+<div class="pangolin-message" data-bind="visible: message, text: message"></div>
+
+<!-- ko if: !configured() -->
+<div class="pangolin-notice">
+  <i class="fas fa-info-circle"></i>
+  Enter your Newt ID and secret in
+  <a href="#" data-bind="click: openSettings">Settings</a>.
+</div>
+<!-- /ko -->
+
+<div class="pangolin-btn-row">
+  <button class="btn btn-mini btn-success" data-bind="click: startNewt, enable: canStart">
+    <i class="fas fa-play"></i> Start
+  </button>
+  <button class="btn btn-mini btn-danger" data-bind="click: stopNewt, enable: canStop">
+    <i class="fas fa-stop"></i> Stop
+  </button>
+  <button class="btn btn-mini" data-bind="click: restartNewt, enable: canRestart">
+    <i class="fas fa-sync" data-bind="css: {'fa-spin': busy}"></i> Restart
+  </button>
+</div>
+<div class="pangolin-error" data-bind="visible: actionError, text: actionError"></div>
+
+<div class="pangolin-log-header">
+  <small><strong>Log</strong></small>
+</div>
+<div class="pangolin-log" data-bind="visible: logLines().length > 0, foreach: logLines">
+  <div class="pangolin-log-line" data-bind="text: $data"></div>
+</div>
+<div class="pangolin-log-empty" data-bind="visible: logLines().length === 0"><small>No output yet.</small></div>
+<!-- /ko -->

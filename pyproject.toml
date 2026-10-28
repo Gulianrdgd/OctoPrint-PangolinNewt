@@ -1,29 +1,33 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "OctoPrint-Pangolin"
-version = "0.2.0"
-description = "Pangolin Newt tunnel manager for OctoPrint: auto-installs and manages Newt for you"
+name = "OctoPrint-PangolinNewt"
+version = "0.3.0"
+description = "Pangolin Newt Client for OctoPrint: reach your printer through Pangolin, no terminal needed"
 authors = [
     {name = "Julian van der Horst"}
 ]
+license = {text = "AGPLv3"}
 readme = {file = "README.md", content-type = "text/markdown"}
 requires-python = ">=3.7, <4"
 dependencies = []
+
+[project.optional-dependencies]
+develop = ["OctoPrint", "pytest"]
 
 [tool.setuptools]
 include-package-data = true
 
 [tool.setuptools.packages.find]
 include = [
-    "octoprint_pangolin",
-    "octoprint_pangolin.*"
+    "octoprint_pangolin_newt",
+    "octoprint_pangolin_newt.*"
 ]
 
 [project.entry-points."octoprint.plugin"]
-pangolin = "octoprint_pangolin"
+pangolin_newt = "octoprint_pangolin_newt"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/OctoPrint-Pangolin"
+Homepage = "https://github.com/Gulianrdgd/OctoPrint-PangolinNewt"

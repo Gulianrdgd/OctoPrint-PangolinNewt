@@ -1,0 +1,32 @@
+{
+  "tag_name": "1.19.0",
+  "prerelease": false,
+  "draft": false,
+  "assets": [
+    {
+      "name": "newt_linux_amd64",
+      "browser_download_url": "https://github.com/fosrl/newt/releases/download/1.19.0/newt_linux_amd64",
+      "digest": "sha256:6d40e223fa49d8bcfa9b7094208c58ff616997979bff7c884d0af61fcc1c5376"
+    },
+    {
+      "name": "newt_linux_arm32",
+      "browser_download_url": "https://github.com/fosrl/newt/releases/download/1.19.0/newt_linux_arm32",
+      "digest": "sha256:d7b129a9772ee0e6f04a850899dfafd0fdf08093a701a866e47be1dad7b663a9"
+    },
+    {
+      "name": "newt_linux_arm32v6",
+      "browser_download_url": "https://github.com/fosrl/newt/releases/download/1.19.0/newt_linux_arm32v6",
+      "digest": "sha256:96e02318205d6ef5144f9a13de0f72179e8f2dab0b7430cbe73efdd9ecbaac8f"
+    },
+    {
+      "name": "newt_linux_arm64",
+      "browser_download_url": "https://github.com/fosrl/newt/releases/download/1.19.0/newt_linux_arm64",
+      "digest": "sha256:2a282e3edda7be17f092ac58aff0ec6dac9ddd152a642e8e61e6d625f2abe696"
+    },
+    {
+      "name": "newt_linux_riscv64",
+      "browser_download_url": "https://github.com/fosrl/newt/releases/download/1.19.0/newt_linux_riscv64",
+      "digest": "sha256:b53ed56ed66c43051d09ebf380827bb9d1ab3680825dabb63c427f58a0083bf9"
+    }
+  ]
+}
