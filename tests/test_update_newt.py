@@ -46,10 +46,3 @@ def test_missing_asset_fails(release):
     with pytest.raises(ValueError):
         update_newt.build_manifest(release)
 
-
-def test_bump_patch():
-    text = '[project]\nname = "x"\nversion = "0.3.9"\n'
-    new_text, version = update_newt.bump_patch(text)
-    assert version == "0.3.10"
-    assert 'version = "0.3.10"' in new_text
-    assert 'name = "x"' in new_text

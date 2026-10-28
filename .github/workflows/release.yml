@@ -1,15 +1,8 @@
 name: Release
 
-# Runs for manually pushed tags, and is called by newt-bump.yml (a tag pushed
-# with GITHUB_TOKEN does not trigger other workflows).
 on:
   push:
     tags: ["[0-9]+.[0-9]+.[0-9]+"]
-  workflow_call:
-    inputs:
-      tag:
-        required: true
-        type: string
 
 permissions:
   contents: write
@@ -18,7 +11,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env:
-      TAG: ${{ inputs.tag || github.ref_name }}
+      TAG: ${{ github.ref_name }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -40,5 +33,5 @@ jobs:
           NEWT=$(python -c "import json; print(json.load(open('octoprint_pangolin_newt/newt_release.json'))['version'])")
           gh release create "$TAG" dist/* \
             --title "$TAG" \
-            --notes "Bundles Newt [$NEWT](https://github.com/fosrl/newt/releases/tag/$NEWT). Update through OctoPrint's Software Update." \
+            --notes "Fresh installs start with Newt [$NEWT](https://github.com/fosrl/newt/releases/tag/$NEWT). Update through OctoPrint's Software Update." \
             --generate-notes

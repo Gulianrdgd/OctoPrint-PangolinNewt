@@ -26,7 +26,9 @@ The sidebar and the status block in the settings are only shown to administrator
 
 ## Updates
 
-Each plugin release pins one Newt version and its sha256 checksum. A daily GitHub Action checks for new Newt releases and publishes a new plugin version when there is one. OctoPrint's Software Update then offers it like any other plugin update. After the update and restart, the plugin installs the matching Newt.
+On first install the plugin downloads the Newt version pinned in the plugin release and verifies its sha256 checksum. After that Newt updates itself: every 6 hours it asks your Pangolin server for the latest version and replaces its own binary when there is a newer one. The plugin keeps an installed Newt as it is, so a plugin update never downgrades it. **Reinstall** puts the pinned version back.
+
+Plugin updates arrive through OctoPrint's Software Update.
 
 ## Supported platforms
 
@@ -50,8 +52,14 @@ pip install -e ".[develop]"
 pytest
 ```
 
-`scripts/update_newt.py` pins the latest Newt release into `octoprint_pangolin_newt/newt_release.json`. CI runs it daily (`.github/workflows/newt-bump.yml`).
+`scripts/update_newt.py` pins the latest Newt release into `octoprint_pangolin_newt/newt_release.json`. Run it by hand before a release when fresh installs should start with a newer Newt.
+
+To release, bump `version` in `pyproject.toml`, commit and push a tag with the same version (no `v`). `.github/workflows/release.yml` tests, builds and publishes the GitHub release.
+
+## Privacy
+
+See [PRIVACY.md](PRIVACY.md) for the data the plugin and Newt send to Pangolin, Fossorial and GitHub.
 
 ## License
 
-AGPLv3
+AGPL-3.0-or-later

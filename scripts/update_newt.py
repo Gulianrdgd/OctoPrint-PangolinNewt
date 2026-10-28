@@ -1,20 +1,17 @@
 """Pin the latest Newt release into octoprint_pangolin_newt/newt_release.json.
 
-Used by the newt-bump workflow. When the pinned Newt changes, the patch
-version in pyproject.toml is bumped and the new plugin version is printed
-(and written to $GITHUB_OUTPUT as `version=...`). Prints nothing and exits 0
-when already up to date.
+Run by hand before a plugin release. The pin only decides which Newt a fresh
+install starts with: Newt updates itself afterwards. Prints the new Newt
+version, or nothing when already up to date.
 """
 import hashlib
 import json
 import os
-import re
 import sys
 import urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MANIFEST_PATH = os.path.join(ROOT, "octoprint_pangolin_newt", "newt_release.json")
-PYPROJECT_PATH = os.path.join(ROOT, "pyproject.toml")
 RELEASES_URL = "https://api.github.com/repos/fosrl/newt/releases/latest"
 
 # manifest arch key -> release asset name
@@ -61,19 +58,6 @@ def build_manifest(release, hash_url=_sha256_of_url):
     return {"version": release["tag_name"], "assets": assets}
 
 
-def bump_patch(pyproject_text):
-    """Return (new_text, new_version) with the patch version incremented."""
-    match = re.search(r'^version = "(\d+)\.(\d+)\.(\d+)"$', pyproject_text, re.M)
-    if not match:
-        raise ValueError("No version line found in pyproject.toml")
-    major, minor, patch = (int(x) for x in match.groups())
-    new_version = "%d.%d.%d" % (major, minor, patch + 1)
-    new_text = (pyproject_text[:match.start()]
-                + 'version = "%s"' % new_version
-                + pyproject_text[match.end():])
-    return new_text, new_version
-
-
 def main():
     release = json.loads(_get(RELEASES_URL).decode())
     manifest = build_manifest(release)
@@ -87,16 +71,7 @@ def main():
         json.dump(manifest, f, indent=2)
         f.write("\n")
 
-    with open(PYPROJECT_PATH) as f:
-        text, version = bump_patch(f.read())
-    with open(PYPROJECT_PATH, "w") as f:
-        f.write(text)
-
-    print(version)
-    output = os.environ.get("GITHUB_OUTPUT")
-    if output:
-        with open(output, "a") as f:
-            f.write("version=%s\nnewt_version=%s\n" % (version, manifest["version"]))
+    print(manifest["version"])
     return 0
 
 

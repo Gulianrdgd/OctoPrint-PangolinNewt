@@ -138,7 +138,9 @@ class PangolinNewtPlugin(
             self._newt.set_state(newt.ERROR, "Unsupported architecture.")
             return False
 
-        if not force and newt.installed_sha256(self._newt.binary_path) == asset["sha256"]:
+        # Newt updates itself in place, so an installed binary is kept even when
+        # it is newer than the pinned one. The pin only seeds the first install.
+        if not force and newt.installed_sha256(self._newt.binary_path) is not None:
             if self._installed_version is None:
                 self._installed_version = newt.binary_version(self._newt.binary_path)
             return True
@@ -164,6 +166,8 @@ class PangolinNewtPlugin(
         if not self._configured():
             return False, "Enter your Newt ID and secret in the plugin settings first."
         creds = self._credentials()
+        # Newt may have updated itself since the last start
+        self._installed_version = newt.binary_version(self._newt.binary_path)
         return self._newt.start(creds["newt_id"], creds["newt_secret"], creds["pangolin_endpoint"])
 
     def _restart_job(self):

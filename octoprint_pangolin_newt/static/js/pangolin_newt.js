@@ -61,8 +61,7 @@ $(function () {
         self.versionLabel = ko.pureComputed(function () {
             var pinned = self.pinnedVersion();
             var installed = self.installedVersion();
-            if (!installed) return pinned + " (not installed)";
-            return installed.indexOf(pinned) !== -1 ? installed : installed + " (update to " + pinned + " pending)";
+            return installed || pinned + " (not installed)";
         });
 
         /* ---- applying backend state ---- */

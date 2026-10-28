@@ -13,7 +13,7 @@ Newt is Pangolin's userspace WireGuard client. Pangolin docs: https://docs.pango
 
 ## Current state
 
-Version 0.3.0: renamed from OctoPrint-Pangolin (identifier `pangolin` -> `pangolin_newt`), pinned Newt with checksum, push-based UI, release automation. 0.2.0 was confirmed working on a real Pi. 0.3.0 has been tested with pytest and a local OctoPrint 1.11.8 on macOS (darwin Newt binary seeded into the data folder), not yet on a Pi.
+Version 0.4.0: changes from the plugin registry review. Added `setup.py` and aligned `pyproject.toml` with the OctoPrint cookiecutter (setuptools>=68, author email, SPDX license `AGPL-3.0-or-later`), added `PRIVACY.md` and the `cloud` attribute, and removed the daily Newt bump workflow because Newt updates itself. 0.3.0 renamed the plugin from OctoPrint-Pangolin (identifier `pangolin` -> `pangolin_newt`). 0.2.0 was confirmed working on a real Pi. 0.4.0 has been tested with pytest and a local OctoPrint 2.0.0rc7 on macOS (darwin Newt binary seeded into the data folder), not yet on a Pi.
 
 GitHub repo: `Gulianrdgd/OctoPrint-PangolinNewt` (the softwareupdate hook and URLs depend on this name).
 
@@ -23,22 +23,24 @@ GitHub repo: `Gulianrdgd/OctoPrint-PangolinNewt` (the softwareupdate hook and UR
 octoprint_pangolin_newt/
   __init__.py                              Plugin class: settings, API, jobs, softwareupdate hook
   newt.py                                  Installer and NewtProcess manager, no OctoPrint imports
-  newt_release.json                        Pinned Newt version, asset URLs and sha256 (written by CI)
+  newt_release.json                        Newt version for fresh installs, asset URLs and sha256
   templates/pangolin_newt_settings.jinja2  Status block, setup steps, validated fields
   templates/pangolin_newt_sidebar.jinja2   Status, buttons, log (admins only)
   static/js/pangolin_newt.js               Knockout view model for both, driven by plugin messages
   static/css/pangolin_newt.css
-scripts/update_newt.py                     Pins latest Newt, bumps patch version
+scripts/update_newt.py                     Pins latest Newt (run by hand before a release)
 tests/                                     pytest (needs OctoPrint installed: pip install -e ".[develop]")
 .github/workflows/ci.yml                   Tests (3.7, 3.12) and build
-.github/workflows/newt-bump.yml            Daily: new Newt -> commit, tag X.Y.Z, call release.yml
 .github/workflows/release.yml              Tag -> test, build, GitHub release
 docs/plugins.octoprint.org/pangolin_newt.md  Draft entry for the plugin registry (one-time PR)
+PRIVACY.md                                 Privacy policy, linked from the registry entry (`privacypolicy`)
+setup.py                                   Cookiecutter shim that sets the license string
 ```
 
 ## How it works
 
-- `on_after_startup`: if autostart is set or Newt is installed, a job installs or updates Newt when the installed sha256 (`bin/newt.sha256`) differs from the pinned one, then starts it if autostart is on and ID and secret are set.
+- `on_after_startup`: if autostart is set or Newt is installed, a job installs the pinned Newt when none is installed (`bin/newt` plus `bin/newt.sha256`), then starts it if autostart is on and ID and secret are set.
+- Newt updates itself: every 6 hours it asks the Pangolin server (`/api/v1/auth/newt/version`), replaces its own binary and re-execs (same PID). The plugin therefore never replaces an installed binary unless the user clicks Reinstall, and re-reads `newt --version` on each start. Do not reintroduce automatic plugin releases per Newt version: the registry reviewer asked to avoid flooding users with update notifications.
 - Jobs run one at a time on a background thread (`_run_job`).
 - `NewtProcess.start` passes `NEWT_ID`, `NEWT_SECRET`, `PANGOLIN_ENDPOINT` and `HEALTH_FILE` through the environment. Newt writes the health file once the tunnel is up: that is the difference between `connecting` and `connected`. While connecting, Newt's latest `ERROR:` line becomes the status message.
 - Each start bumps a generation counter. Threads of an older process never touch state (this was the old "status flips to stopped after restart" bug).
