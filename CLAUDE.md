@@ -13,7 +13,7 @@ Newt is Pangolin's userspace WireGuard client. Pangolin docs: https://docs.pango
 
 ## Current state
 
-Version 0.4.0: changes from the plugin registry review. Added `setup.py` and aligned `pyproject.toml` with the OctoPrint cookiecutter (setuptools>=68, author email, SPDX license `AGPL-3.0-or-later`), added `PRIVACY.md` and the `cloud` attribute, and removed the daily Newt bump workflow because Newt updates itself. 0.3.0 renamed the plugin from OctoPrint-Pangolin (identifier `pangolin` -> `pangolin_newt`). 0.2.0 was confirmed working on a real Pi. 0.4.0 has been tested with pytest and a local OctoPrint 2.0.0rc7 on macOS (darwin Newt binary seeded into the data folder), not yet on a Pi.
+Version 0.4.1: README and settings page tell users to add the request header `X-Scheme: https` to the OctoPrint resource in Pangolin (see How it works). Version 0.4.0: changes from the plugin registry review. Added `setup.py` and aligned `pyproject.toml` with the OctoPrint cookiecutter (setuptools>=68, author email, SPDX license `AGPL-3.0-or-later`), added `PRIVACY.md` and the `cloud` attribute, and removed the daily Newt bump workflow because Newt updates itself. 0.3.0 renamed the plugin from OctoPrint-Pangolin (identifier `pangolin` -> `pangolin_newt`). 0.2.0 was confirmed working on a real Pi. 0.4.0 has been tested with pytest and a local OctoPrint 2.0.0rc7 on macOS (darwin Newt binary seeded into the data folder), not yet on a Pi.
 
 GitHub repo: `Gulianrdgd/OctoPrint-PangolinNewt` (the softwareupdate hook and URLs depend on this name).
 
@@ -47,6 +47,7 @@ setup.py                                   Cookiecutter shim that sets the licen
 - State changes and log lines are coalesced (250 ms) and pushed with `send_plugin_message` (admin only). The UI fetches a full snapshot via `GET /api/plugin/pangolin_newt` on startup, login, reconnect and when settings open. Log lines carry a number so the UI only appends new ones.
 - API (`POST /api/plugin/pangolin_newt`, admin only): `start`, `stop`, `restart`, `reinstall`.
 - Settings: the secret is write-only (`on_settings_load` blanks it, an empty value on save keeps the stored one). Inputs are trimmed and invalid or non-https endpoints are dropped (`clean_settings`); the plugin registry requires https for external services. Changing ID, secret or endpoint restarts Newt when it is running or autostart is on.
+- On OctoPi, HAProxy adds `X-Scheme: http` to requests arriving through Newt, and OctoPrint trusts `X-Scheme` over `X-Forwarded-Proto`. Without the Pangolin request header `X-Scheme: https`, login fails with "CSRF protection error" (OctoPrint 2.0) and the websocket is refused ("Socket connection failed"). Details in `docs/octoprint-2.0-csrf-login-error.md`.
 - Release flow: plugin updates reach users through OctoPrint's Software Update (`github_release`, tags without `v`, pip installs `archive/{target_version}.zip`). The plugin registry only needs the one-time PR.
 
 ## Known issues and TODO

@@ -26,6 +26,7 @@
   <li>In your Pangolin dashboard, open <strong>Sites</strong> and add a site of type <strong>Newt</strong>.</li>
   <li>Copy the <strong>Newt ID</strong> and <strong>Newt secret</strong> it shows. The secret is shown only once.</li>
   <li>Paste them below and click <strong>Save</strong>. The tunnel starts within a few seconds.</li>
+  <li>In Pangolin, open the resource for this printer, go to the <strong>Proxy</strong> tab and add the request header <code>X-Scheme: https</code> under <strong>Custom headers</strong>. Without it, OctoPi tells OctoPrint the connection is http, and logging in through Pangolin fails with "CSRF protection error" or "Socket connection failed".</li>
 </ol>
 <p class="muted">
   More detail in the <a href="https://docs.pangolin.net/manage/sites/install-site" target="_blank" rel="noopener noreferrer">Pangolin documentation</a>.

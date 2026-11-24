@@ -13,6 +13,7 @@ The plugin downloads Pangolin's **Newt** client, verifies its checksum, runs it 
 2. Restart OctoPrint when prompted.
 3. In your Pangolin dashboard, open **Sites** and add a site of type **Newt**. Copy the **Newt ID** and **Newt secret**. The secret is shown only once.
 4. In OctoPrint, open **Settings → Pangolin Newt Client**, paste both values and click **Save**.
+5. In Pangolin, open the resource for OctoPrint, go to the **Proxy** tab and add the request header `X-Scheme: https` under **Custom headers**. Without it, login through Pangolin fails on OctoPi (see Notes).
 
 The tunnel comes up within a few seconds. Leave the endpoint at `https://app.pangolin.net` unless you host Pangolin yourself. The endpoint must use https.
 
@@ -44,6 +45,7 @@ Plugin updates arrive through OctoPrint's Software Update.
 - Newt is installed inside OctoPrint's plugin data folder (`~/.octoprint/data/pangolin_newt/bin/newt`). It does not need root or sudo.
 - The Newt secret is stored in OctoPrint's `config.yaml`. It is never sent back to the browser and is passed to Newt through its environment, not its command line.
 - Upgrading from 0.2.x (`OctoPrint-Pangolin`): uninstall the old plugin, install this one and enter your ID and secret again. You can delete the old `/usr/local/bin/newt`.
+- "CSRF protection error" on login or "Socket connection failed" through Pangolin: in Pangolin, open the resource for OctoPrint, go to the **Proxy** tab and add the request header `X-Scheme: https` under **Custom headers**. OctoPi's HAProxy marks requests arriving through Newt as `X-Scheme: http`, and OctoPrint trusts that header over Pangolin's `X-Forwarded-Proto`. HAProxy only adds its own `X-Scheme` when the request has none.
 
 ## Development
 

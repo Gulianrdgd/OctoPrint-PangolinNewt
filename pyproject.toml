@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "OctoPrint-PangolinNewt"
-version = "0.4.0"
+version = "0.4.1"
 description = "Pangolin Newt Client for OctoPrint: reach your printer through Pangolin, no terminal needed"
 authors = [
     {name = "Gulianrdgd", email = "julianvanderhorst2001@googlemail.com"}
